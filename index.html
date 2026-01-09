@@ -7,85 +7,208 @@
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     body {
-      background-color: #f8fafc; /* app light background */
+      background: #f8fafc;
       color: #0f172a;
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
+
+    .hidden { display: none !important; }
   </style>
 </head>
 
 <body class="min-h-screen">
 
 <!-- =====================
-     APP HEADER (EXACT STYLE)
+     APP TOP BAR (MATCHES SS)
 ===================== -->
 <header class="sticky top-0 z-50 bg-white border-b border-gray-200">
-  <div class="flex items-center justify-between px-6 h-14">
+  <div class="flex items-center h-12 px-4 gap-4">
 
     <!-- Left -->
-    <div class="flex items-center gap-3">
-      <img
-        src="coreworks_ai_logo.jpeg"
-        alt="Coreworks"
-        class="h-6 w-auto"
-      />
-      <span class="text-sm font-medium text-gray-900">
-        Budget vs Actual Variance Analysis
-      </span>
+    <div class="flex items-center gap-3 text-sm font-semibold">
+      ☰
+      <span>COREWORKS</span>
     </div>
+
+    <!-- Tabs -->
+    <div class="flex items-center gap-2 ml-6">
+      <div class="px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 text-sm font-medium">
+        Chat
+      </div>
+      <div class="px-3 py-1.5 rounded-md text-gray-600 text-sm">
+        Budget vs Actual Variance Analysis
+      </div>
+    </div>
+
+    <!-- Spacer -->
+    <div class="flex-1"></div>
 
     <!-- Right -->
-    <div class="flex items-center gap-3">
-      <button
-        class="text-sm px-3 py-1.5 rounded-md border border-gray-300
-               text-gray-700 hover:bg-gray-100">
-        Export
-      </button>
-    </div>
-
+    <button class="text-sm px-3 py-1.5 border rounded-md text-gray-700">
+      Export
+    </button>
   </div>
 </header>
 
 <!-- =====================
-     CENTERED CHAT
+     CHAT VIEW
 ===================== -->
-<main class="relative min-h-[calc(100vh-56px)] flex items-center justify-center px-4">
+<main id="view-chat"
+      class="min-h-[calc(100vh-48px)] flex flex-col items-center justify-center px-4">
 
   <div class="w-full max-w-3xl">
 
     <!-- Chat box -->
     <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
 
-      <!-- Prompt -->
-      <div class="px-4 py-4 text-gray-900 text-lg">
+      <div class="px-4 py-4 text-lg">
         “Compare burn vs forecast”
       </div>
 
-      <!-- Attachment + action -->
       <div class="flex items-center justify-between px-4 pb-3">
 
-        <div class="flex items-center gap-2 text-sm text-gray-500">
+        <div class="text-sm text-gray-500">
           📎 financials_q4.xlsx attached
         </div>
 
         <button
-          class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700
-                 flex items-center justify-center text-white">
+          onclick="runDemo('Compare burn vs forecast')"
+          class="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
           →
         </button>
-
       </div>
     </div>
 
+    <!-- Helper -->
     <p class="mt-4 text-center text-sm text-gray-400">
       The system will clarify assumptions before execution.
     </p>
 
+    <!-- =====================
+         PROMPT BUBBLES (RESTORED)
+    ===================== -->
+    <div id="suggestions"
+         class="mt-6 flex flex-wrap justify-center gap-3">
+
+      <button onclick="runDemo('Show Q4 variance')"
+              class="px-4 py-2 text-sm rounded-full border bg-white hover:bg-gray-50">
+        Show Q4 variance
+      </button>
+
+      <button onclick="runDemo('Analyze profitability')"
+              class="px-4 py-2 text-sm rounded-full border bg-white hover:bg-gray-50">
+        Analyze profitability
+      </button>
+
+      <button onclick="runDemo('Check budget burn')"
+              class="px-4 py-2 text-sm rounded-full border bg-white hover:bg-gray-50">
+        Check budget burn
+      </button>
+
+      <button onclick="runDemo('Review headcount costs')"
+              class="px-4 py-2 text-sm rounded-full border bg-white hover:bg-gray-50">
+        Review headcount costs
+      </button>
+
+    </div>
+
+    <!-- =====================
+         AMBIGUITY RESOLVER
+    ===================== -->
+    <div id="step-resolver" class="hidden mt-8">
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-6">
+        <h3 class="font-semibold text-lg mb-2">
+          Ambiguity detected
+        </h3>
+        <p class="text-sm text-gray-600 mb-4">
+          Please confirm the metric you want to use:
+        </p>
+
+        <div class="space-y-3">
+          <button onclick="launchDashboard()"
+                  class="w-full text-left p-3 border rounded-lg bg-white hover:border-blue-500">
+            Dollar variance ($)
+          </button>
+          <button onclick="launchDashboard()"
+                  class="w-full text-left p-3 border rounded-lg bg-white hover:border-blue-500">
+            Percentage variance (%)
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </main>
+
+<!-- =====================
+     DASHBOARD VIEW
+===================== -->
+<main id="view-dashboard"
+      class="hidden min-h-screen px-8 pt-20 pb-10">
+
+  <div class="flex justify-between items-center mb-8">
+    <div>
+      <h1 class="text-2xl font-bold">
+        Budget vs Actual Variance Analysis
+      </h1>
+      <p class="text-sm text-gray-500">
+        NetSuite_Budget_vs_Actual_Q4.csv
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-white border rounded-lg p-6 shadow-sm">
+    <h3 class="font-semibold mb-4">
+      Average Variance % by Department
+    </h3>
+    <div class="h-64">
+      <canvas id="varianceChart"></canvas>
+    </div>
+  </div>
+
+</main>
+
+<!-- =====================
+     LOGIC (UNCHANGED)
+===================== -->
+<script>
+  function runDemo(text) {
+    document.getElementById('suggestions').classList.add('hidden');
+    setTimeout(() => {
+      document.getElementById('step-resolver').classList.remove('hidden');
+    }, 300);
+  }
+
+  function launchDashboard() {
+    document.getElementById('view-chat').classList.add('hidden');
+    document.getElementById('view-dashboard').classList.remove('hidden');
+    renderChart();
+  }
+
+  function renderChart() {
+    const ctx = document.getElementById('varianceChart');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['R&D', 'Ops', 'Security', 'Marketing', 'Engineering'],
+        datasets: [{
+          data: [7.9, 6.5, 5.8, 5.1, 4.2],
+          backgroundColor: '#2563eb',
+          borderRadius: 6
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } },
+        maintainAspectRatio: false
+      }
+    });
+  }
+</script>
 
 </body>
 </html>
