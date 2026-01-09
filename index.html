@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Coreworks</title>
+  <title>COREWORKS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Tailwind -->
@@ -10,44 +10,45 @@
 
   <style>
     body {
-      background: #f8fafc;
+      background-color: #f9fafb; /* light neutral */
       color: #0f172a;
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       transition: background 0.2s ease, color 0.2s ease;
     }
 
     body.dark {
-      background: #020617;
+      background-color: #020617;
       color: #f1f5f9;
     }
 
-    .tab {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 10px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      font-size: 13px;
+    .card {
       background: #ffffff;
+      border: 1px solid #e5e7eb;
+    }
+
+    body.dark .card {
+      background: #020617;
+      border-color: #334155;
+    }
+
+    .pill {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
       color: #334155;
     }
 
-    body.dark .tab {
+    .pill:hover {
+      background: #f1f5f9;
+    }
+
+    body.dark .pill {
       background: #020617;
       border-color: #334155;
       color: #e5e7eb;
     }
 
-    .tab.active {
-      background: #eff6ff;
-      border-color: #bfdbfe;
-      color: #2563eb;
-      font-weight: 500;
-    }
-
-    body.dark .tab.active {
-      background: rgba(37,99,235,0.15);
+    body.dark .pill:hover {
+      background: #0f172a;
     }
   </style>
 </head>
@@ -55,79 +56,60 @@
 <body class="min-h-screen" id="app">
 
 <!-- =====================
-     APP HEADER
+     HEADER (LIGHT, CLEAN)
 ===================== -->
-<header class="sticky top-0 z-50 bg-white border-b border-gray-200 dark:bg-[#020617] dark:border-slate-700">
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200">
   <div class="flex items-center h-14 px-4 gap-6">
 
-    <!-- LEFT: Brand -->
-    <div class="flex items-center gap-3">
-      <span class="text-xl font-bold tracking-tight">
-        COREWORKS
-      </span>
+    <!-- Brand -->
+    <div class="text-xl font-semibold tracking-tight">
+      COREWORKS
     </div>
 
-    <!-- LEFT: Tabs -->
+    <!-- Tabs -->
     <div class="flex items-center gap-2">
-
-      <!-- Chat tab -->
-      <div class="tab active">
-        💬 Chat
-      </div>
-
-      <!-- CSV tab -->
-      <div class="tab">
-        <!-- Google Sheets–style icon -->
-        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="#16a34a">
-          <path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-        </svg>
-        02_NetSuite_Budget_vs_Actual.csv
-      </div>
-
-    </div>
-
-    <!-- CENTER: Context -->
-    <div class="flex-1 flex justify-center">
-      <div class="px-4 py-1.5 rounded-full text-sm font-medium
-                  bg-gray-100 text-gray-700
-                  dark:bg-slate-800 dark:text-slate-200">
+      <div class="px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 text-sm font-medium">
         Chat
       </div>
+
+      <div class="px-3 py-1.5 rounded-md text-gray-600 text-sm border">
+        02_NetSuite_Budget_vs_Actual.csv
+      </div>
     </div>
 
-    <!-- RIGHT: Dark mode toggle -->
+    <!-- Spacer -->
+    <div class="flex-1"></div>
+
+    <!-- Dark mode toggle -->
     <button
       onclick="toggleTheme()"
       class="h-9 w-9 rounded-full border border-gray-300
              flex items-center justify-center
-             hover:bg-gray-100
-             dark:border-slate-600 dark:hover:bg-slate-800"
-      title="Toggle theme"
+             hover:bg-gray-100"
+      title="Toggle dark mode"
     >
       🌙
     </button>
-
   </div>
 </header>
 
 <!-- =====================
-     CHAT VIEW
+     CHAT (CENTERED)
 ===================== -->
 <main class="min-h-[calc(100vh-56px)] flex items-center justify-center px-4">
 
-  <div class="w-full max-w-3xl">
+  <div class="w-full max-w-3xl text-center">
 
-    <!-- Chat box -->
-    <div class="bg-white border border-gray-200 rounded-xl shadow-sm
-                dark:bg-[#020617] dark:border-slate-700">
+    <!-- Chat card -->
+    <div class="card rounded-xl shadow-sm text-left">
 
-      <div class="px-4 py-4 text-lg">
+      <div class="px-5 py-4 text-lg">
         “Compare burn vs forecast”
       </div>
 
-      <div class="flex items-center justify-between px-4 pb-3">
+      <div class="flex items-center justify-between px-5 pb-4">
 
-        <div class="text-sm text-gray-500 dark:text-slate-400">
+        <div class="text-sm text-gray-500">
           📎 financials_q4.xlsx attached
         </div>
 
@@ -136,34 +118,29 @@
                  flex items-center justify-center text-white">
           →
         </button>
-
       </div>
     </div>
 
-    <p class="mt-4 text-center text-sm text-gray-400">
+    <p class="mt-4 text-sm text-gray-400">
       The system will clarify assumptions before execution.
     </p>
 
-    <!-- Prompt bubbles -->
+    <!-- Prompt pills -->
     <div class="mt-6 flex flex-wrap justify-center gap-3">
 
-      <button class="px-4 py-2 text-sm rounded-full border bg-white hover:bg-gray-50
-                     dark:bg-[#020617] dark:border-slate-700 dark:hover:bg-slate-800">
+      <button class="pill px-4 py-2 rounded-full text-sm">
         Show Q4 variance
       </button>
 
-      <button class="px-4 py-2 text-sm rounded-full border bg-white hover:bg-gray-50
-                     dark:bg-[#020617] dark:border-slate-700 dark:hover:bg-slate-800">
+      <button class="pill px-4 py-2 rounded-full text-sm">
         Analyze profitability
       </button>
 
-      <button class="px-4 py-2 text-sm rounded-full border bg-white hover:bg-gray-50
-                     dark:bg-[#020617] dark:border-slate-700 dark:hover:bg-slate-800">
+      <button class="pill px-4 py-2 rounded-full text-sm">
         Check budget burn
       </button>
 
-      <button class="px-4 py-2 text-sm rounded-full border bg-white hover:bg-gray-50
-                     dark:bg-[#020617] dark:border-slate-700 dark:hover:bg-slate-800">
+      <button class="pill px-4 py-2 rounded-full text-sm">
         Review headcount costs
       </button>
 
