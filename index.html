@@ -24,7 +24,7 @@
       --text-muted: #64748b;
       --primary: #2563eb;
       --danger: #ef4444;
-      --warning: #f59e0b;
+      --bar-bg: #e2e8f0;
     }
 
     /* MATTE BLACK THEME */
@@ -36,6 +36,7 @@
       --text: #e4e4e7;      /* Zinc 200 */
       --text-muted: #a1a1aa;
       --primary: #3b82f6;
+      --bar-bg: #27272a;
     }
 
     body {
@@ -73,6 +74,12 @@
       to { opacity: 1; transform: translateY(0); }
     }
     .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    
+    @keyframes growWidth {
+      from { width: 0; }
+      to { width: var(--w); }
+    }
+    .animate-grow { animation: growWidth 1s ease-out forwards; }
   </style>
 </head>
 
@@ -217,7 +224,6 @@
       const msg = landingInput.value.trim();
       if (!msg) return;
 
-      // Switch Views
       const landing = document.getElementById('landing-container');
       landing.style.opacity = '0';
       setTimeout(() => {
@@ -225,10 +231,9 @@
         document.getElementById('chat-history').classList.remove('hidden');
         document.getElementById('docked-input-container').classList.remove('hidden');
         
-        // Add User Message
         addMessage(msg, 'user');
         
-        // CHECK FOR AMBIGUITY TRIGGER
+        // AMBIGUITY TRIGGER CHECK
         if (msg.toLowerCase().includes('budget') || msg.toLowerCase().includes('burn')) {
            setTimeout(() => showAmbiguityCard(), 600);
         } else {
@@ -246,7 +251,6 @@
       input.value = '';
       input.style.height = 'auto'; 
 
-      // Simple response for docked state
       setTimeout(() => showTypingIndicator(), 600);
     }
 
@@ -269,26 +273,22 @@
       history.scrollTo(0, history.scrollHeight);
     }
 
-    // --- AMBIGUITY RESOLVER COMPONENT ---
+    // --- AMBIGUITY & CHARTING ---
     function showAmbiguityCard() {
       const history = document.getElementById('chat-history');
       const div = document.createElement('div');
       div.className = `w-full max-w-3xl mx-auto flex justify-start animate-fade-in`;
       
-      // The "Ambiguity Card" Design
       div.innerHTML = `
         <div class="bg-surface border border-theme rounded-xl shadow-sm w-full max-w-lg overflow-hidden">
-          
           <div class="bg-amber-50 dark:bg-amber-900/20 px-5 py-3 border-b border-theme flex items-center gap-2">
             <i class="ph ph-warning-circle text-amber-600 dark:text-amber-500 text-lg"></i>
             <span class="text-sm font-semibold text-amber-700 dark:text-amber-500">Clarification Needed</span>
           </div>
-
           <div class="p-5">
             <p class="text-[var(--text)] mb-4">
               "Budget" appears in multiple contexts. Which one would you like to analyze?
             </p>
-            
             <div class="flex flex-col gap-2">
               <button onclick="resolveAmbiguity('Marketing Budget')" class="text-left px-4 py-3 rounded-lg border border-theme hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 transition-all group">
                 <div class="flex justify-between items-center">
@@ -296,7 +296,6 @@
                   <span class="text-xs text-[var(--text-muted)]">Sheet 1 · Col D</span>
                 </div>
               </button>
-              
               <button onclick="resolveAmbiguity('Global OpEx')" class="text-left px-4 py-3 rounded-lg border border-theme hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 transition-all group">
                 <div class="flex justify-between items-center">
                   <span class="text-sm font-medium">Global OpEx</span>
@@ -313,18 +312,69 @@
     }
 
     function resolveAmbiguity(choice) {
-      // 1. Remove the ambiguity card (optional, but let's keep it for history)
-      // 2. Add User selection as a message
       addMessage(choice, 'user');
       
-      // 3. Show final result
+      // TRIGGER THE CHART RESPONSE
       setTimeout(() => {
         const history = document.getElementById('chat-history');
         const div = document.createElement('div');
         div.className = `w-full max-w-3xl mx-auto flex justify-start animate-fade-in`;
+        
+        // This is the Custom Chart HTML
         div.innerHTML = `
-           <div class="bg-surface border border-theme text-[var(--text)] rounded-2xl rounded-tl-sm shadow-sm px-5 py-3 text-base max-w-[80%] leading-relaxed">
-             Understood. The <strong>${choice}</strong> burn rate is currently <span class="text-red-500 font-medium">+12%</span> vs forecast.
+           <div class="bg-surface border border-theme text-[var(--text)] rounded-2xl rounded-tl-sm shadow-sm p-5 w-full max-w-lg">
+             <div class="mb-4">
+               <p class="mb-3">I've visualized the <strong>${choice}</strong> burn. You are overspending in October and November.</p>
+             </div>
+
+             <div class="space-y-4 font-mono text-xs">
+               
+               <div>
+                 <div class="flex justify-between mb-1">
+                   <span class="font-sans font-medium text-[var(--text-muted)]">October</span>
+                   <span class="text-red-500 font-bold">115%</span>
+                 </div>
+                 <div class="h-2 w-full bg-[var(--bar-bg)] rounded-full overflow-hidden flex">
+                   <div style="--w:60%" class="h-full bg-slate-400 opacity-50 animate-grow rounded-l-full"></div>
+                   <div style="--w:40%" class="h-full bg-red-500 animate-grow rounded-r-full"></div>
+                 </div>
+                 <div class="flex justify-between mt-1 text-[10px] text-[var(--text-muted)]">
+                    <span>Budget: $42k</span>
+                    <span>Actual: $48k</span>
+                 </div>
+               </div>
+
+               <div>
+                 <div class="flex justify-between mb-1">
+                   <span class="font-sans font-medium text-[var(--text-muted)]">November</span>
+                   <span class="text-red-500 font-bold">124%</span>
+                 </div>
+                 <div class="h-2 w-full bg-[var(--bar-bg)] rounded-full overflow-hidden flex">
+                   <div style="--w:55%" class="h-full bg-slate-400 opacity-50 animate-grow rounded-l-full"></div>
+                   <div style="--w:45%" class="h-full bg-red-500 animate-grow rounded-r-full"></div>
+                 </div>
+                  <div class="flex justify-between mt-1 text-[10px] text-[var(--text-muted)]">
+                    <span>Budget: $42k</span>
+                    <span>Actual: $52k</span>
+                 </div>
+               </div>
+
+                <div>
+                 <div class="flex justify-between mb-1">
+                   <span class="font-sans font-medium text-[var(--text-muted)]">December (proj)</span>
+                   <span class="text-emerald-500 font-bold">95%</span>
+                 </div>
+                 <div class="h-2 w-full bg-[var(--bar-bg)] rounded-full overflow-hidden relative">
+                   <div style="--w:95%" class="absolute top-0 left-0 h-full bg-emerald-500 animate-grow rounded-full z-10"></div>
+                   <div class="absolute top-0 left-0 h-full w-full border-r border-dashed border-slate-400 z-20"></div> 
+                 </div>
+                 <div class="flex justify-between mt-1 text-[10px] text-[var(--text-muted)]">
+                    <span>Budget: $45k</span>
+                    <span>Proj: $43k</span>
+                 </div>
+               </div>
+
+             </div>
            </div>
         `;
         history.appendChild(div);
@@ -349,7 +399,7 @@
 
       setTimeout(() => {
         div.remove();
-        addMessage("I've analyzed the Q4 data. Operating expenses are within 3% of the baseline.", 'ai');
+        addMessage("I've analyzed the data. The margins are holding steady at 22% despite the Q4 spend increase.", 'ai');
       }, 1500);
     }
   </script>
