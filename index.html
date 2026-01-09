@@ -9,7 +9,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    /* ---------- THEME ---------- */
     body {
       background-color: #f9fafb;
       color: #0f172a;
@@ -18,15 +17,13 @@
     }
 
     body.dark {
-      background-color: #0b0f14; /* matte black */
+      background-color: #0b0f14;
       color: #e5e7eb;
     }
 
-    /* ---------- HEADER ---------- */
     header {
       background-color: #ffffff;
       border-bottom: 1px solid #e5e7eb;
-      transition: background-color 0.2s ease, border-color 0.2s ease;
     }
 
     body.dark header {
@@ -34,7 +31,6 @@
       border-bottom: 1px solid #1f2933;
     }
 
-    /* ---------- CARDS ---------- */
     .card {
       background-color: #ffffff;
       border: 1px solid #e5e7eb;
@@ -45,7 +41,6 @@
       border-color: #1f2933;
     }
 
-    /* ---------- PILLS ---------- */
     .pill {
       background-color: #ffffff;
       border: 1px solid #e5e7eb;
@@ -66,7 +61,6 @@
       background-color: #111827;
     }
 
-    /* ---------- FILE TAB ---------- */
     .file-tab {
       display: flex;
       align-items: center;
@@ -85,7 +79,6 @@
       color: #e5e7eb;
     }
 
-    /* ---------- TOGGLE ---------- */
     .toggle {
       width: 42px;
       height: 22px;
@@ -93,7 +86,6 @@
       background-color: #e5e7eb;
       position: relative;
       cursor: pointer;
-      transition: background-color 0.2s ease;
     }
 
     .toggle::after {
@@ -120,107 +112,125 @@
 
 <body class="min-h-screen" id="app">
 
-<!-- =====================
-     HEADER
-===================== -->
+<!-- HEADER -->
 <header class="sticky top-0 z-50">
   <div class="flex items-center h-14 px-4 gap-6">
 
-    <!-- Brand -->
     <div class="text-xl font-semibold tracking-tight">
       COREWORKS
     </div>
 
-    <!-- Tabs -->
     <div class="flex items-center gap-2">
-
       <div class="px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 text-sm font-medium">
         Chat
       </div>
 
       <div class="file-tab">
-        <!-- Google Sheets icon -->
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
           <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#16a34a"/>
           <path d="M9 11h6M9 15h6M9 7h2" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
         </svg>
         02_NetSuite_Budget_vs_Actual.csv
       </div>
-
     </div>
 
-    <!-- Spacer -->
     <div class="flex-1"></div>
 
-    <!-- Dark mode toggle -->
-    <div onclick="toggleTheme()" class="toggle" title="Toggle dark mode"></div>
-
+    <div onclick="toggleTheme()" class="toggle"></div>
   </div>
 </header>
 
-<!-- =====================
-     CHAT
-===================== -->
+<!-- CHAT -->
 <main class="min-h-[calc(100vh-56px)] flex items-center justify-center px-4">
+  <div class="w-full max-w-3xl">
 
-  <div class="w-full max-w-3xl text-center">
+    <!-- Chat history -->
+    <div id="chat-history" class="space-y-4 mb-6"></div>
 
-    <!-- Chat card -->
-    <div class="card rounded-xl shadow-sm text-left">
-
-      <div class="px-5 py-4 text-lg">
-        “Compare burn vs forecast”
-      </div>
+    <!-- Input -->
+    <div class="card rounded-xl shadow-sm">
+      <textarea
+        id="chat-input"
+        rows="1"
+        placeholder="Ask a financial question…"
+        class="w-full resize-none bg-transparent px-5 py-4 text-lg focus:outline-none"
+      ></textarea>
 
       <div class="flex items-center justify-between px-5 pb-4">
-
         <div class="text-sm text-gray-500">
           📎 financials_q4.xlsx attached
         </div>
 
         <button
-          class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700
-                 flex items-center justify-center text-white">
+          onclick="sendMessage()"
+          class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white">
           →
         </button>
-
       </div>
     </div>
 
-    <p class="mt-4 text-sm text-gray-400">
+    <p class="mt-4 text-sm text-gray-400 text-center">
       The system will clarify assumptions before execution.
     </p>
 
-    <!-- Prompt pills -->
+    <!-- Prompt bubbles -->
     <div class="mt-6 flex flex-wrap justify-center gap-3">
-
-      <button class="pill px-4 py-2 rounded-full text-sm">
-        Show Q4 variance
+      <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Compare burn vs forecast')">
+        Compare burn vs forecast
       </button>
-
-      <button class="pill px-4 py-2 rounded-full text-sm">
+      <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Analyze profitability')">
         Analyze profitability
       </button>
-
-      <button class="pill px-4 py-2 rounded-full text-sm">
+      <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Check budget burn')">
         Check budget burn
       </button>
-
-      <button class="pill px-4 py-2 rounded-full text-sm">
+      <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Review headcount costs')">
         Review headcount costs
       </button>
-
     </div>
 
   </div>
 </main>
 
-<!-- =====================
-     SCRIPT
-===================== -->
+<!-- SCRIPT -->
 <script>
   function toggleTheme() {
     document.body.classList.toggle('dark');
+  }
+
+  function usePrompt(text) {
+    document.getElementById('chat-input').value = text;
+    document.getElementById('chat-input').focus();
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const history = document.getElementById('chat-history');
+
+    // User message
+    history.innerHTML += `
+      <div class="text-right">
+        <div class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
+          ${text}
+        </div>
+      </div>
+    `;
+
+    input.value = "";
+
+    // Assistant placeholder
+    setTimeout(() => {
+      history.innerHTML += `
+        <div class="text-left">
+          <div class="inline-block bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm">
+            🔍 Analyzing your request… (placeholder response)
+          </div>
+        </div>
+      `;
+    }, 600);
   }
 </script>
 
