@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Coreworks</title>
+  <title>COREWORKS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Favicon -->
@@ -29,11 +29,11 @@
     }
 
     body.dark {
-      --bg: #0b0f14;          /* matte black */
-      --surface: #11161c;     /* cards */
-      --border: #1f2933;
-      --text: #e5e7eb;
-      --muted: #9ca3af;
+      --bg: #0a0a0a;        /* TRUE matte black */
+      --surface: #121212;   /* neutral dark surface */
+      --border: #1e1e1e;
+      --text: #e5e5e5;
+      --muted: #a3a3a3;
     }
 
     header {
@@ -57,7 +57,7 @@
     }
 
     body.dark .pill:hover {
-      background: #151b22;
+      background: #1a1a1a;
     }
 
     .file-tab {
@@ -76,7 +76,7 @@
       width: 42px;
       height: 22px;
       border-radius: 9999px;
-      background: #d1d5db;
+      background: #d4d4d4;
       position: relative;
       cursor: pointer;
     }
@@ -94,7 +94,7 @@
     }
 
     body.dark .toggle {
-      background: #2563eb;
+      background: #3b82f6; /* blue only for control */
     }
 
     body.dark .toggle::after {
@@ -109,11 +109,11 @@
 <header class="sticky top-0 z-50">
   <div class="flex items-center h-14 px-4 gap-4">
 
-    <!-- Brand -->
-    <div class="flex items-center gap-2">
+    <!-- Brand (CLICKABLE HOME) -->
+    <a href="/" class="flex items-center gap-2 hover:opacity-80">
       <img src="coreworks-icon.svg" alt="Coreworks" class="h-5 w-5" />
       <span class="text-lg font-semibold tracking-tight">COREWORKS</span>
-    </div>
+    </a>
 
     <!-- Tabs -->
     <div class="flex items-center gap-2 ml-4">
@@ -144,7 +144,7 @@
        class="flex-1 overflow-y-auto px-4 pt-12 pb-36 space-y-10 hidden">
   </div>
 
-  <!-- Landing input -->
+  <!-- Landing -->
   <div id="landing"
        class="flex-1 flex items-center justify-center px-4">
 
@@ -192,7 +192,7 @@
 
     <div class="w-full max-w-3xl mx-auto">
 
-      <!-- Prompt pills (persisted) -->
+      <!-- Prompt pills -->
       <div class="mb-3 flex flex-wrap gap-2">
         <button class="pill px-3 py-1.5 rounded-full text-sm" onclick="useBottom('Compare burn vs forecast')">
           Compare burn vs forecast
