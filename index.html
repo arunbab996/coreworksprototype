@@ -23,6 +23,8 @@
       --text: #0f172a;
       --text-muted: #64748b;
       --primary: #2563eb;
+      --danger: #ef4444;
+      --warning: #f59e0b;
     }
 
     /* MATTE BLACK THEME */
@@ -43,16 +45,11 @@
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    /* Utility to hide scrollbar but keep functionality */
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
+    /* Scrollbar Hiding */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    /* Custom Borders & Cards */
+    /* Custom Utilities */
     .border-theme { border-color: var(--border); }
     .bg-surface { background-color: var(--surface); }
     .hover-surface:hover { background-color: var(--surface-hover); }
@@ -67,31 +64,23 @@
     }
 
     /* Inputs */
-    textarea {
-      background: transparent;
-      color: var(--text);
-    }
-    textarea::placeholder {
-      color: var(--text-muted);
-      opacity: 0.7;
-    }
+    textarea { background: transparent; color: var(--text); }
+    textarea::placeholder { color: var(--text-muted); opacity: 0.7; }
     
-    /* Animation */
+    /* Animations */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .animate-fade-in {
-      animation: fadeIn 0.4s ease-out forwards;
-    }
+    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
   </style>
 </head>
 
 <body class="flex flex-col min-h-screen">
 
   <header class="sticky top-0 z-50 border-b border-theme h-14 flex items-center px-4 justify-between">
-    
     <div class="flex items-center gap-6">
+      
       <a href="/" class="flex items-center gap-2 group cursor-pointer">
         <img src="coreworks-icon.svg" alt="Coreworks" class="h-6 w-6" />
         <span class="font-semibold tracking-tight text-lg group-hover:opacity-80 transition-opacity">
@@ -115,7 +104,7 @@
     </div>
 
     <div class="flex items-center gap-4">
-      <button onclick="toggleTheme()" class="w-8 h-8 rounded-full flex items-center justify-center hover-surface text-[var(--text-muted)] transition-colors" title="Toggle Dark Mode">
+      <button onclick="toggleTheme()" class="w-8 h-8 rounded-full flex items-center justify-center hover-surface text-[var(--text-muted)] transition-colors">
         <i class="ph ph-moon text-xl dark:hidden"></i>
         <i class="ph ph-sun text-xl hidden dark:block"></i>
       </button>
@@ -155,8 +144,8 @@
             ></textarea>
             
             <div class="flex justify-between items-center mt-3 pt-2 border-t border-dashed border-theme">
-              <span class="text-xs text-[var(--text-muted)] flex items-center gap-1">
-                <i class="ph ph-paperclip"></i> Context active: Q4 Budget
+              <span class="text-xs text-[var(--text-muted)]">
+                📎 02_NetSuite_Budget_vs_Actual.csv attached
               </span>
               <button onclick="transitionToChat()" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 transition-colors">
                 <i class="ph ph-arrow-right text-lg"></i>
@@ -166,14 +155,11 @@
         </div>
 
         <div class="mt-8 flex flex-wrap justify-center gap-2">
-          <button onclick="fillInput('Compare burn vs forecast')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
-            Compare burn vs forecast
+          <button onclick="fillInput('Check budget burn')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
+            Check budget burn
           </button>
-          <button onclick="fillInput('Analyze profitability by region')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
-            Analyze profitability by region
-          </button>
-          <button onclick="fillInput('Draft executive summary')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
-            Draft executive summary
+          <button onclick="fillInput('Analyze profitability')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
+            Analyze profitability
           </button>
         </div>
       </div>
@@ -181,15 +167,6 @@
 
     <div id="docked-input-container" class="hidden border-t border-theme bg-[var(--bg)] p-4">
       <div class="max-w-3xl mx-auto">
-        <div class="flex gap-2 mb-3 overflow-x-auto no-scrollbar">
-           <button onclick="fillDocked('Visualize this')" class="whitespace-nowrap px-3 py-1 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
-            Visualize this
-          </button>
-          <button onclick="fillDocked('Export to PDF')" class="whitespace-nowrap px-3 py-1 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
-            Export to PDF
-          </button>
-        </div>
-
         <div class="relative bg-surface border border-theme rounded-xl shadow-sm p-3 flex items-end gap-2">
           <button class="text-[var(--text-muted)] hover:text-[var(--text)] p-2">
             <i class="ph ph-plus-circle text-xl"></i>
@@ -206,21 +183,14 @@
             <i class="ph ph-arrow-up text-lg"></i>
           </button>
         </div>
-        <div class="text-center mt-2">
-           <span class="text-[10px] text-[var(--text-muted)]">Coreworks AI can make mistakes. Verify financial data.</span>
-        </div>
       </div>
     </div>
 
   </main>
 
   <script>
-    // --- Theme Toggle ---
-    function toggleTheme() {
-      document.body.classList.toggle('dark');
-    }
+    function toggleTheme() { document.body.classList.toggle('dark'); }
 
-    // --- Interaction Logic ---
     function autoResize(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
@@ -228,12 +198,6 @@
 
     function fillInput(text) {
       const input = document.getElementById('landing-input');
-      input.value = text;
-      input.focus();
-    }
-
-    function fillDocked(text) {
-      const input = document.getElementById('docked-input');
       input.value = text;
       input.focus();
     }
@@ -246,28 +210,30 @@
       }
     }
 
-    // --- State Management ---
+    // --- MAIN CHAT LOGIC ---
+
     function transitionToChat() {
       const landingInput = document.getElementById('landing-input');
       const msg = landingInput.value.trim();
-      
       if (!msg) return;
 
-      // 1. Hide Landing
+      // Switch Views
       const landing = document.getElementById('landing-container');
       landing.style.opacity = '0';
       setTimeout(() => {
         landing.classList.add('hidden');
-        
-        // 2. Show Chat Interface
         document.getElementById('chat-history').classList.remove('hidden');
         document.getElementById('docked-input-container').classList.remove('hidden');
         
-        // 3. Add Message
+        // Add User Message
         addMessage(msg, 'user');
         
-        // 4. Simulate AI Response
-        setTimeout(() => showTypingIndicator(), 600);
+        // CHECK FOR AMBIGUITY TRIGGER
+        if (msg.toLowerCase().includes('budget') || msg.toLowerCase().includes('burn')) {
+           setTimeout(() => showAmbiguityCard(), 600);
+        } else {
+           setTimeout(() => showTypingIndicator(), 600);
+        }
       }, 300);
     }
 
@@ -278,8 +244,9 @@
 
       addMessage(msg, 'user');
       input.value = '';
-      input.style.height = 'auto'; // Reset height
+      input.style.height = 'auto'; 
 
+      // Simple response for docked state
       setTimeout(() => showTypingIndicator(), 600);
     }
 
@@ -298,9 +265,71 @@
           ${text}
         </div>
       `;
+      history.appendChild(div);
+      history.scrollTo(0, history.scrollHeight);
+    }
+
+    // --- AMBIGUITY RESOLVER COMPONENT ---
+    function showAmbiguityCard() {
+      const history = document.getElementById('chat-history');
+      const div = document.createElement('div');
+      div.className = `w-full max-w-3xl mx-auto flex justify-start animate-fade-in`;
+      
+      // The "Ambiguity Card" Design
+      div.innerHTML = `
+        <div class="bg-surface border border-theme rounded-xl shadow-sm w-full max-w-lg overflow-hidden">
+          
+          <div class="bg-amber-50 dark:bg-amber-900/20 px-5 py-3 border-b border-theme flex items-center gap-2">
+            <i class="ph ph-warning-circle text-amber-600 dark:text-amber-500 text-lg"></i>
+            <span class="text-sm font-semibold text-amber-700 dark:text-amber-500">Clarification Needed</span>
+          </div>
+
+          <div class="p-5">
+            <p class="text-[var(--text)] mb-4">
+              "Budget" appears in multiple contexts. Which one would you like to analyze?
+            </p>
+            
+            <div class="flex flex-col gap-2">
+              <button onclick="resolveAmbiguity('Marketing Budget')" class="text-left px-4 py-3 rounded-lg border border-theme hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 transition-all group">
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium">Marketing Budget</span>
+                  <span class="text-xs text-[var(--text-muted)]">Sheet 1 · Col D</span>
+                </div>
+              </button>
+              
+              <button onclick="resolveAmbiguity('Global OpEx')" class="text-left px-4 py-3 rounded-lg border border-theme hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 transition-all group">
+                <div class="flex justify-between items-center">
+                  <span class="text-sm font-medium">Global OpEx</span>
+                  <span class="text-xs text-[var(--text-muted)]">Sheet 2 · Col F</span>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
       
       history.appendChild(div);
       history.scrollTo(0, history.scrollHeight);
+    }
+
+    function resolveAmbiguity(choice) {
+      // 1. Remove the ambiguity card (optional, but let's keep it for history)
+      // 2. Add User selection as a message
+      addMessage(choice, 'user');
+      
+      // 3. Show final result
+      setTimeout(() => {
+        const history = document.getElementById('chat-history');
+        const div = document.createElement('div');
+        div.className = `w-full max-w-3xl mx-auto flex justify-start animate-fade-in`;
+        div.innerHTML = `
+           <div class="bg-surface border border-theme text-[var(--text)] rounded-2xl rounded-tl-sm shadow-sm px-5 py-3 text-base max-w-[80%] leading-relaxed">
+             Understood. The <strong>${choice}</strong> burn rate is currently <span class="text-red-500 font-medium">+12%</span> vs forecast.
+           </div>
+        `;
+        history.appendChild(div);
+        history.scrollTo(0, history.scrollHeight);
+      }, 800);
     }
 
     function showTypingIndicator() {
@@ -308,7 +337,6 @@
       const div = document.createElement('div');
       div.id = 'typing-indicator';
       div.className = `w-full max-w-3xl mx-auto flex justify-start animate-fade-in`;
-      
       div.innerHTML = `
         <div class="bg-surface border border-theme px-4 py-3 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-2">
           <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -319,10 +347,9 @@
       history.appendChild(div);
       history.scrollTo(0, history.scrollHeight);
 
-      // Remove typing and add real text after delay
       setTimeout(() => {
         div.remove();
-        addMessage("I've analyzed the Q4 budget data. The burn rate is 12% higher than forecast due to unexpected marketing spend in October.", 'ai');
+        addMessage("I've analyzed the Q4 data. Operating expenses are within 3% of the baseline.", 'ai');
       }, 1500);
     }
   </script>
