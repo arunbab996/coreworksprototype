@@ -9,46 +9,111 @@
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
+    /* ---------- THEME ---------- */
     body {
-      background-color: #f9fafb; /* light neutral */
+      background-color: #f9fafb;
       color: #0f172a;
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      transition: background 0.2s ease, color 0.2s ease;
+      transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     body.dark {
-      background-color: #020617;
-      color: #f1f5f9;
+      background-color: #0b0f14; /* matte black */
+      color: #e5e7eb;
     }
 
+    /* ---------- HEADER ---------- */
+    header {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+
+    body.dark header {
+      background-color: #0b0f14;
+      border-bottom: 1px solid #1f2933;
+    }
+
+    /* ---------- CARDS ---------- */
     .card {
-      background: #ffffff;
+      background-color: #ffffff;
       border: 1px solid #e5e7eb;
     }
 
     body.dark .card {
-      background: #020617;
-      border-color: #334155;
+      background-color: #0f172a;
+      border-color: #1f2933;
     }
 
+    /* ---------- PILLS ---------- */
     .pill {
-      background: #ffffff;
+      background-color: #ffffff;
       border: 1px solid #e5e7eb;
       color: #334155;
     }
 
     .pill:hover {
-      background: #f1f5f9;
+      background-color: #f1f5f9;
     }
 
     body.dark .pill {
-      background: #020617;
-      border-color: #334155;
+      background-color: #0f172a;
+      border-color: #1f2933;
       color: #e5e7eb;
     }
 
     body.dark .pill:hover {
-      background: #0f172a;
+      background-color: #111827;
+    }
+
+    /* ---------- FILE TAB ---------- */
+    .file-tab {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 13px;
+      background-color: #ffffff;
+      color: #334155;
+    }
+
+    body.dark .file-tab {
+      background-color: #0f172a;
+      border-color: #1f2933;
+      color: #e5e7eb;
+    }
+
+    /* ---------- TOGGLE ---------- */
+    .toggle {
+      width: 42px;
+      height: 22px;
+      border-radius: 9999px;
+      background-color: #e5e7eb;
+      position: relative;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    .toggle::after {
+      content: "";
+      width: 18px;
+      height: 18px;
+      background-color: #ffffff;
+      border-radius: 9999px;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.2s ease;
+    }
+
+    body.dark .toggle {
+      background-color: #2563eb;
+    }
+
+    body.dark .toggle::after {
+      transform: translateX(20px);
     }
   </style>
 </head>
@@ -56,9 +121,9 @@
 <body class="min-h-screen" id="app">
 
 <!-- =====================
-     HEADER (LIGHT, CLEAN)
+     HEADER
 ===================== -->
-<header class="sticky top-0 z-50 bg-white border-b border-gray-200">
+<header class="sticky top-0 z-50">
   <div class="flex items-center h-14 px-4 gap-6">
 
     <!-- Brand -->
@@ -68,33 +133,33 @@
 
     <!-- Tabs -->
     <div class="flex items-center gap-2">
+
       <div class="px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 text-sm font-medium">
         Chat
       </div>
 
-      <div class="px-3 py-1.5 rounded-md text-gray-600 text-sm border">
+      <div class="file-tab">
+        <!-- Google Sheets icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#16a34a"/>
+          <path d="M9 11h6M9 15h6M9 7h2" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
         02_NetSuite_Budget_vs_Actual.csv
       </div>
+
     </div>
 
     <!-- Spacer -->
     <div class="flex-1"></div>
 
     <!-- Dark mode toggle -->
-    <button
-      onclick="toggleTheme()"
-      class="h-9 w-9 rounded-full border border-gray-300
-             flex items-center justify-center
-             hover:bg-gray-100"
-      title="Toggle dark mode"
-    >
-      🌙
-    </button>
+    <div onclick="toggleTheme()" class="toggle" title="Toggle dark mode"></div>
+
   </div>
 </header>
 
 <!-- =====================
-     CHAT (CENTERED)
+     CHAT
 ===================== -->
 <main class="min-h-[calc(100vh-56px)] flex items-center justify-center px-4">
 
@@ -118,6 +183,7 @@
                  flex items-center justify-center text-white">
           →
         </button>
+
       </div>
     </div>
 
