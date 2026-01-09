@@ -2,72 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Coreworks Prototype</title>
+  <title>Coreworks</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* --------------------
-       THEME VARIABLES
-    -------------------- */
-    body.light {
-      --bg: #ffffff;
-      --text: #0f172a;
-      --muted: #64748b;
-      --border: #e5e7eb;
-      --card: #ffffff;
-    }
-
-    body.dark {
-      --bg: #020617;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
-      --border: rgba(148,163,184,0.2);
-      --card: rgba(15,23,42,0.6);
-    }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s ease, color 0.3s ease;
-    }
-
-    .glass {
-      background: var(--card);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--border);
+      background-color: #f8fafc; /* app light background */
+      color: #0f172a;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
     }
   </style>
 </head>
 
-<body class="light min-h-screen relative" id="app">
+<body class="min-h-screen">
 
 <!-- =====================
-     GLOBAL HEADER
+     APP HEADER (EXACT STYLE)
 ===================== -->
-<header class="sticky top-0 z-50 bg-white dark:bg-[#020617] border-b border-gray-200 dark:border-slate-700">
-  <div class="flex items-center justify-between px-6 py-3">
+<header class="sticky top-0 z-50 bg-white border-b border-gray-200">
+  <div class="flex items-center justify-between px-6 h-14">
 
     <!-- Left -->
-    <div class="flex items-center gap-4">
-      <span class="font-bold text-lg tracking-tight">COREWORKS</span>
-      <span class="text-sm text-gray-500 dark:text-slate-400 hidden sm:inline">
-        Financial Intelligence
+    <div class="flex items-center gap-3">
+      <img
+        src="coreworks_ai_logo.jpeg"
+        alt="Coreworks"
+        class="h-6 w-auto"
+      />
+      <span class="text-sm font-medium text-gray-900">
+        Budget vs Actual Variance Analysis
       </span>
     </div>
 
     <!-- Right -->
-    <div class="flex items-center gap-4">
+    <div class="flex items-center gap-3">
       <button
-        onclick="toggleTheme()"
-        class="px-3 py-1.5 text-sm border rounded-md
-               border-gray-300 dark:border-slate-600
-               text-gray-700 dark:text-slate-200
-               hover:bg-gray-100 dark:hover:bg-slate-800">
-        Toggle theme
+        class="text-sm px-3 py-1.5 rounded-md border border-gray-300
+               text-gray-700 hover:bg-gray-100">
+        Export
       </button>
     </div>
 
@@ -75,33 +50,29 @@
 </header>
 
 <!-- =====================
-     CHAT VIEW
+     CENTERED CHAT
 ===================== -->
-<main id="view-chat"
-      class="absolute inset-0 flex items-center justify-center px-4">
+<main class="relative min-h-[calc(100vh-56px)] flex items-center justify-center px-4">
 
   <div class="w-full max-w-3xl">
 
     <!-- Chat box -->
-    <div class="glass rounded-2xl shadow-lg p-2">
+    <div class="bg-white border border-gray-200 rounded-xl shadow-sm">
 
-      <textarea
-        id="user-input"
-        rows="1"
-        class="w-full bg-transparent resize-none p-4
-               text-lg placeholder:text-slate-400
-               focus:outline-none"
-        placeholder="Ask a financial question…">Compare burn vs forecast</textarea>
+      <!-- Prompt -->
+      <div class="px-4 py-4 text-gray-900 text-lg">
+        “Compare burn vs forecast”
+      </div>
 
+      <!-- Attachment + action -->
       <div class="flex items-center justify-between px-4 pb-3">
 
-        <div class="flex items-center gap-2 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
+        <div class="flex items-center gap-2 text-sm text-gray-500">
           📎 financials_q4.xlsx attached
         </div>
 
         <button
-          onclick="showResolver()"
-          class="h-9 w-9 rounded-full bg-blue-600 hover:bg-blue-700
+          class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700
                  flex items-center justify-center text-white">
           →
         </button>
@@ -109,96 +80,12 @@
       </div>
     </div>
 
-    <p class="mt-6 text-center text-sm text-slate-500">
+    <p class="mt-4 text-center text-sm text-gray-400">
       The system will clarify assumptions before execution.
     </p>
 
-    <!-- Ambiguity Resolver -->
-    <div id="resolver" class="hidden mt-6 glass rounded-xl p-6 border-l-4 border-amber-400">
-      <h3 class="font-semibold text-lg mb-2">Ambiguity detected</h3>
-      <p class="text-sm text-slate-500 mb-4">
-        Please confirm which variance metric you want:
-      </p>
-
-      <div class="space-y-3">
-        <button onclick="launchDashboard()"
-                class="w-full text-left p-3 rounded-lg border hover:border-blue-500 hover:bg-blue-50">
-          Dollar variance ($)
-        </button>
-        <button onclick="launchDashboard()"
-                class="w-full text-left p-3 rounded-lg border hover:border-blue-500 hover:bg-blue-50">
-          Percentage variance (%)
-        </button>
-      </div>
-    </div>
-
   </div>
 </main>
-
-<!-- =====================
-     DASHBOARD VIEW
-===================== -->
-<main id="view-dashboard"
-      class="hidden min-h-screen px-8 pt-24 pb-10">
-
-  <div class="flex justify-between items-center mb-8">
-    <div>
-      <h1 class="text-2xl font-bold">Budget vs Actual Variance Analysis</h1>
-      <p class="text-sm text-slate-500">Source: NetSuite Q4</p>
-    </div>
-    <button class="px-4 py-2 bg-blue-600 text-white rounded-md">
-      Export
-    </button>
-  </div>
-
-  <div class="bg-white border rounded-lg p-6 shadow-sm mb-8">
-    <h3 class="font-semibold mb-4">Average Variance % by Department</h3>
-    <div class="h-64">
-      <canvas id="varianceChart"></canvas>
-    </div>
-  </div>
-
-</main>
-
-<!-- =====================
-     SCRIPT
-===================== -->
-<script>
-  function toggleTheme() {
-    document.body.classList.toggle('dark');
-    document.body.classList.toggle('light');
-  }
-
-  function showResolver() {
-    document.getElementById('resolver').classList.remove('hidden');
-  }
-
-  function launchDashboard() {
-    document.getElementById('view-chat').classList.add('hidden');
-    document.getElementById('view-dashboard').classList.remove('hidden');
-    renderChart();
-  }
-
-  function renderChart() {
-    const ctx = document.getElementById('varianceChart');
-    new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: ['R&D', 'Ops', 'Security', 'Marketing', 'Eng'],
-        datasets: [{
-          data: [7.9, 6.5, 5.8, 5.1, 4.2],
-          backgroundColor: '#2563eb',
-          borderRadius: 6
-        }]
-      },
-      options: {
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true } },
-        maintainAspectRatio: false
-      }
-    });
-  }
-</script>
 
 </body>
 </html>
