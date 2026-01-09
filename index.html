@@ -168,11 +168,11 @@
           <button onclick="fillInput('Analyze variance')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
             Analyze variance
           </button>
-          <button onclick="fillInput('Show Q4 Spend')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
-            Show Q4 Spend
+          <button onclick="fillInput('Show Headcount')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
+            Show Headcount
           </button>
-          <button onclick="fillInput('Forecast vs Actuals')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
-            Forecast vs Actuals
+           <button onclick="fillInput('Analyze Vendors')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
+            Analyze Vendors
           </button>
         </div>
       </div>
@@ -185,14 +185,20 @@
            <button onclick="fillDocked('What is the variance?')" class="whitespace-nowrap px-3 py-1.5 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
             What is the variance?
           </button>
-          <button onclick="fillDocked('Visualize spend')" class="whitespace-nowrap px-3 py-1.5 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
-            Visualize spend
+          <button onclick="fillDocked('Show Headcount')" class="whitespace-nowrap px-3 py-1.5 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
+            Show Headcount
+          </button>
+          <button onclick="fillDocked('Calculate Runway')" class="whitespace-nowrap px-3 py-1.5 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
+            Calculate Runway
+          </button>
+           <button onclick="fillDocked('Analyze Vendors')" class="whitespace-nowrap px-3 py-1.5 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
+            Analyze Vendors
+          </button>
+          <button onclick="fillDocked('Gross Margin Trend')" class="whitespace-nowrap px-3 py-1.5 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
+            Gross Margin Trend
           </button>
           <button onclick="fillDocked('Forecast for December')" class="whitespace-nowrap px-3 py-1.5 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
             Forecast for December
-          </button>
-          <button onclick="fillDocked('Marketing burn rate')" class="whitespace-nowrap px-3 py-1.5 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
-            Marketing burn rate
           </button>
         </div>
 
@@ -260,15 +266,7 @@
         document.getElementById('docked-input-container').classList.remove('hidden');
         
         addMessage(msg, 'user');
-        
-        // CHECK FOR AMBIGUITY TRIGGER (EXPANDED LIST)
-        const triggers = ['budget', 'burn', 'variance', 'spend', 'forecast', 'breakdown'];
-        
-        if (triggers.some(t => msg.toLowerCase().includes(t))) {
-           setTimeout(() => showAmbiguityCard(msg), 600);
-        } else {
-           setTimeout(() => showTypingIndicator(), 600);
-        }
+        checkAmbiguity(msg);
       }, 300);
     }
 
@@ -281,8 +279,16 @@
       input.value = '';
       input.style.height = 'auto'; 
 
-      // DOCKED STATE ALSO CHECKS FOR AMBIGUITY
-      const triggers = ['budget', 'burn', 'variance', 'spend', 'forecast', 'breakdown'];
+      checkAmbiguity(msg);
+    }
+
+    function checkAmbiguity(msg) {
+      // EXPANDED TRIGGER LIST
+      const triggers = [
+        'budget', 'burn', 'variance', 'spend', 'forecast', 'breakdown',
+        'headcount', 'vendors', 'runway', 'margin', 'profit'
+      ];
+      
       if (triggers.some(t => msg.toLowerCase().includes(t))) {
          setTimeout(() => showAmbiguityCard(msg), 600);
       } else {
@@ -315,6 +321,27 @@
       const div = document.createElement('div');
       div.className = `w-full max-w-3xl mx-auto flex justify-start animate-fade-in`;
       
+      // Determine options based on keyword to make it feel smarter
+      let option1 = 'Marketing Department';
+      let option2 = 'Global Consolidated';
+      let question = 'This request matches multiple data sources. Which view would you like to apply?';
+
+      const lower = triggerMsg.toLowerCase();
+      
+      if (lower.includes('headcount')) {
+        option1 = 'FTE Only';
+        option2 = 'FTE + Contractors';
+        question = 'How would you like to define headcount?';
+      } else if (lower.includes('vendor')) {
+        option1 = 'By Total Spend';
+        option2 = 'By Invoice Count';
+        question = 'How should we sort the vendor list?';
+      } else if (lower.includes('runway')) {
+        option1 = 'Based on Hist. Burn';
+        option2 = 'Based on Forecast';
+        question = 'Which basis should be used for the runway calculation?';
+      }
+
       div.innerHTML = `
         <div class="bg-surface border border-theme rounded-xl shadow-sm w-full max-w-lg overflow-hidden">
           <div class="bg-amber-50 dark:bg-amber-900/20 px-5 py-3 border-b border-theme flex items-center gap-2">
@@ -323,19 +350,19 @@
           </div>
           <div class="p-5">
             <p class="text-[var(--text)] mb-4">
-              This request matches multiple data sources. Which view would you like to apply?
+              ${question}
             </p>
             <div class="flex flex-col gap-2">
-              <button onclick="resolveAmbiguity('Marketing Department')" class="text-left px-4 py-3 rounded-lg border border-theme hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 transition-all group">
+              <button onclick="resolveAmbiguity('${option1}')" class="text-left px-4 py-3 rounded-lg border border-theme hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 transition-all group">
                 <div class="flex justify-between items-center">
-                  <span class="text-sm font-medium">Marketing Department</span>
-                  <span class="text-xs text-[var(--text-muted)]">Sheet 1 · Col D</span>
+                  <span class="text-sm font-medium">${option1}</span>
+                  <span class="text-xs text-[var(--text-muted)]">Source A</span>
                 </div>
               </button>
-              <button onclick="resolveAmbiguity('Global Consolidated')" class="text-left px-4 py-3 rounded-lg border border-theme hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 transition-all group">
+              <button onclick="resolveAmbiguity('${option2}')" class="text-left px-4 py-3 rounded-lg border border-theme hover:bg-blue-50 dark:hover:bg-blue-900/10 hover:border-blue-200 transition-all group">
                 <div class="flex justify-between items-center">
-                  <span class="text-sm font-medium">Global Consolidated</span>
-                  <span class="text-xs text-[var(--text-muted)]">Sheet 2 · Col F</span>
+                  <span class="text-sm font-medium">${option2}</span>
+                  <span class="text-xs text-[var(--text-muted)]">Source B</span>
                 </div>
               </button>
             </div>
@@ -360,7 +387,7 @@
         div.innerHTML = `
            <div class="bg-surface border border-theme text-[var(--text)] rounded-2xl rounded-tl-sm shadow-sm p-5 w-full max-w-lg">
              <div class="mb-4">
-               <p class="mb-3">I've visualized the <strong>${choice}</strong> spend. You are overspending in October and November.</p>
+               <p class="mb-3">I've visualized the data for <strong>${choice}</strong>. You are currently trending above baseline.</p>
              </div>
 
              <div class="space-y-4 font-mono text-xs">
@@ -375,8 +402,8 @@
                    <div style="--w:40%" class="h-full bg-red-500 animate-grow rounded-r-full"></div>
                  </div>
                  <div class="flex justify-between mt-1 text-[10px] text-[var(--text-muted)]">
-                    <span>Budget: $42k</span>
-                    <span>Actual: $48k</span>
+                    <span>Baseline: 42</span>
+                    <span>Actual: 48</span>
                  </div>
                </div>
 
@@ -390,8 +417,8 @@
                    <div style="--w:45%" class="h-full bg-red-500 animate-grow rounded-r-full"></div>
                  </div>
                   <div class="flex justify-between mt-1 text-[10px] text-[var(--text-muted)]">
-                    <span>Budget: $42k</span>
-                    <span>Actual: $52k</span>
+                    <span>Baseline: 42</span>
+                    <span>Actual: 52</span>
                  </div>
                </div>
 
@@ -405,8 +432,8 @@
                    <div class="absolute top-0 left-0 h-full w-full border-r border-dashed border-slate-400 z-20"></div> 
                  </div>
                  <div class="flex justify-between mt-1 text-[10px] text-[var(--text-muted)]">
-                    <span>Budget: $45k</span>
-                    <span>Proj: $43k</span>
+                    <span>Baseline: 45</span>
+                    <span>Proj: 43</span>
                  </div>
                </div>
 
@@ -435,7 +462,7 @@
 
       setTimeout(() => {
         div.remove();
-        addMessage("I've analyzed the data. The margins are holding steady at 22% despite the Q4 spend increase.", 'ai');
+        addMessage("I've analyzed the data. The metrics are trending positive.", 'ai');
       }, 1500);
     }
   </script>
