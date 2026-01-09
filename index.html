@@ -5,59 +5,59 @@
   <title>COREWORKS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="coreworks-icon.svg" />
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
+    /* ======================
+       THEME TOKENS
+    ====================== */
     body {
-      background-color: #f9fafb;
-      color: #0f172a;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --text: #0f172a;
+      --muted: #6b7280;
+
+      background: var(--bg);
+      color: var(--text);
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
     body.dark {
-      background-color: #0b0f14;
-      color: #e5e7eb;
+      --bg: #0b0f14;          /* matte black */
+      --surface: #11161c;     /* cards */
+      --border: #1f2933;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
     }
 
     header {
-      background-color: #ffffff;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    body.dark header {
-      background-color: #0b0f14;
-      border-bottom: 1px solid #1f2933;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
     }
 
     .card {
-      background-color: #ffffff;
-      border: 1px solid #e5e7eb;
-    }
-
-    body.dark .card {
-      background-color: #0f172a;
-      border-color: #1f2933;
+      background: var(--surface);
+      border: 1px solid var(--border);
     }
 
     .pill {
-      background-color: #ffffff;
-      border: 1px solid #e5e7eb;
-      color: #334155;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
     }
 
     .pill:hover {
-      background-color: #f1f5f9;
-    }
-
-    body.dark .pill {
-      background-color: #0f172a;
-      border-color: #1f2933;
-      color: #e5e7eb;
+      background: rgba(0,0,0,0.04);
     }
 
     body.dark .pill:hover {
-      background-color: #111827;
+      background: #151b22;
     }
 
     .file-tab {
@@ -65,24 +65,18 @@
       align-items: center;
       gap: 8px;
       padding: 6px 10px;
-      border: 1px solid #e5e7eb;
+      border: 1px solid var(--border);
       border-radius: 8px;
       font-size: 13px;
-      background-color: #ffffff;
-      color: #334155;
-    }
-
-    body.dark .file-tab {
-      background-color: #0f172a;
-      border-color: #1f2933;
-      color: #e5e7eb;
+      background: var(--surface);
+      color: var(--text);
     }
 
     .toggle {
       width: 42px;
       height: 22px;
       border-radius: 9999px;
-      background-color: #e5e7eb;
+      background: #d1d5db;
       position: relative;
       cursor: pointer;
     }
@@ -91,7 +85,7 @@
       content: "";
       width: 18px;
       height: 18px;
-      background-color: #ffffff;
+      background: #ffffff;
       border-radius: 9999px;
       position: absolute;
       top: 2px;
@@ -100,7 +94,7 @@
     }
 
     body.dark .toggle {
-      background-color: #2563eb;
+      background: #2563eb;
     }
 
     body.dark .toggle::after {
@@ -111,20 +105,25 @@
 
 <body class="min-h-screen" id="app">
 
-<!-- HEADER -->
+<!-- ================= HEADER ================= -->
 <header class="sticky top-0 z-50">
-  <div class="flex items-center h-14 px-4 gap-6">
-    <div class="text-xl font-semibold tracking-tight">COREWORKS</div>
+  <div class="flex items-center h-14 px-4 gap-4">
 
+    <!-- Brand -->
     <div class="flex items-center gap-2">
-      <div class="px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 text-sm font-medium">
+      <img src="coreworks-icon.svg" alt="Coreworks" class="h-5 w-5" />
+      <span class="text-lg font-semibold tracking-tight">COREWORKS</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex items-center gap-2 ml-4">
+      <div class="px-3 py-1.5 rounded-md bg-blue-600 text-white text-sm font-medium">
         Chat
       </div>
 
       <div class="file-tab">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-          <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" fill="#16a34a"/>
-          <path d="M9 11h6M9 15h6M9 7h2" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"/>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#16a34a">
+          <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
         </svg>
         02_NetSuite_Budget_vs_Actual.csv
       </div>
@@ -132,49 +131,41 @@
 
     <div class="flex-1"></div>
 
-    <div onclick="toggleTheme()" class="toggle"></div>
+    <!-- Dark mode toggle -->
+    <div onclick="toggleTheme()" class="toggle" title="Toggle dark mode"></div>
   </div>
 </header>
 
-<!-- MAIN -->
-<main id="main" class="min-h-[calc(100vh-56px)] flex flex-col">
+<!-- ================= MAIN ================= -->
+<main class="min-h-[calc(100vh-56px)] flex flex-col">
 
-  <!-- CHAT HISTORY -->
+  <!-- Chat history -->
   <div id="chat-history"
-       class="flex-1 overflow-y-auto px-4 pt-12 pb-32 space-y-8 hidden">
-
+       class="flex-1 overflow-y-auto px-4 pt-12 pb-36 space-y-10 hidden">
   </div>
 
-  <!-- LANDING INPUT -->
-  <div id="landing-input"
-       class="flex-1 flex flex-col items-center justify-center px-4">
+  <!-- Landing input -->
+  <div id="landing"
+       class="flex-1 flex items-center justify-center px-4">
 
     <div class="w-full max-w-3xl">
 
-      <div class="card rounded-xl shadow-sm">
+      <div class="card rounded-xl">
         <textarea
           id="chat-input"
           rows="1"
           placeholder="Ask a financial question…"
-          class="w-full resize-none bg-transparent px-5 py-4 text-lg focus:outline-none"
+          class="w-full bg-transparent resize-none px-5 py-4 text-lg focus:outline-none"
         ></textarea>
 
-        <div class="flex items-center justify-between px-5 pb-4">
-          <div class="text-sm text-gray-500">
-            📎 financials_q4.xlsx attached
-          </div>
-
-          <button
-            onclick="sendMessage()"
-            class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white">
+        <div class="flex items-center justify-between px-5 pb-4 text-sm text-[color:var(--muted)]">
+          📎 financials_q4.xlsx attached
+          <button onclick="sendMessage()"
+                  class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center">
             →
           </button>
         </div>
       </div>
-
-      <p class="mt-4 text-sm text-gray-400 text-center">
-        The system will clarify assumptions before execution.
-      </p>
 
       <!-- Prompt pills -->
       <div class="mt-6 flex flex-wrap justify-center gap-3">
@@ -195,27 +186,34 @@
     </div>
   </div>
 
-  <!-- DOCKED INPUT -->
-  <div id="docked-input"
-       class="hidden border-t border-gray-200 bg-white px-4 py-4">
+  <!-- Docked input -->
+  <div id="docked"
+       class="hidden border-t border-[color:var(--border)] bg-[color:var(--bg)] px-4 py-4">
 
     <div class="w-full max-w-3xl mx-auto">
-      <div class="card rounded-xl shadow-sm">
+
+      <!-- Prompt pills (persisted) -->
+      <div class="mb-3 flex flex-wrap gap-2">
+        <button class="pill px-3 py-1.5 rounded-full text-sm" onclick="useBottom('Compare burn vs forecast')">
+          Compare burn vs forecast
+        </button>
+        <button class="pill px-3 py-1.5 rounded-full text-sm" onclick="useBottom('Analyze profitability')">
+          Analyze profitability
+        </button>
+      </div>
+
+      <div class="card rounded-xl">
         <textarea
           id="chat-input-bottom"
           rows="1"
           placeholder="Ask a follow-up…"
-          class="w-full resize-none bg-transparent px-5 py-4 text-lg focus:outline-none"
+          class="w-full bg-transparent resize-none px-5 py-4 text-lg focus:outline-none"
         ></textarea>
 
-        <div class="flex items-center justify-between px-5 pb-4">
-          <div class="text-sm text-gray-500">
-            📎 financials_q4.xlsx attached
-          </div>
-
-          <button
-            onclick="sendFollowUp()"
-            class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white">
+        <div class="flex items-center justify-between px-5 pb-4 text-sm text-[color:var(--muted)]">
+          📎 financials_q4.xlsx attached
+          <button onclick="sendFollowUp()"
+                  class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center">
             →
           </button>
         </div>
@@ -225,7 +223,7 @@
 
 </main>
 
-<!-- SCRIPT -->
+<!-- ================= SCRIPT ================= -->
 <script>
   function toggleTheme() {
     document.body.classList.toggle('dark');
@@ -235,15 +233,18 @@
     document.getElementById('chat-input').value = text;
   }
 
+  function useBottom(text) {
+    document.getElementById('chat-input-bottom').value = text;
+  }
+
   function sendMessage() {
     const input = document.getElementById('chat-input');
     const text = input.value.trim();
     if (!text) return;
 
-    // Switch layout
-    document.getElementById('landing-input').classList.add('hidden');
+    document.getElementById('landing').classList.add('hidden');
     document.getElementById('chat-history').classList.remove('hidden');
-    document.getElementById('docked-input').classList.remove('hidden');
+    document.getElementById('docked').classList.remove('hidden');
 
     appendMessage(text);
     input.value = "";
@@ -270,9 +271,10 @@
         </div>
 
         <div class="text-left">
-          <div class="inline-block bg-gray-100 text-gray-800 px-6 py-4 rounded-xl text-base">
+          <div class="inline-block bg-[color:var(--surface)] border border-[color:var(--border)]
+                      px-6 py-4 rounded-xl text-base">
             🔍 Analyzing your request…<br/>
-            <span class="text-sm text-gray-500">(placeholder response)</span>
+            <span class="text-sm text-[color:var(--muted)]">(placeholder response)</span>
           </div>
         </div>
       </div>
