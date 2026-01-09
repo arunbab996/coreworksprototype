@@ -41,6 +41,7 @@
       background: rgba(59, 130, 246, 0.2);
       border-color: rgba(96, 165, 250, 0.5);
       cursor: pointer;
+      transform: translateY(-2px);
     }
     
     .hidden { display: none !important; }
@@ -62,12 +63,12 @@
       <h1 class="text-4xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-slate-200">
         Financial Intelligence Engine
       </h1>
-      <p class="text-slate-400 text-lg">Ask questions about your Q4 NetSuite data.</p>
+      <p class="text-slate-400 text-lg">Select a query to test the Ambiguity Resolution Protocol.</p>
     </div>
 
-    <div class="w-full max-w-2xl transition-all duration-500" id="chat-container">
+    <div class="w-full max-w-3xl transition-all duration-500" id="chat-container">
 
-      <div class="glass rounded-2xl p-2 shadow-2xl ring-1 ring-white/10 relative">
+      <div class="glass rounded-2xl p-2 shadow-2xl ring-1 ring-white/10 relative mb-8">
         <textarea id="user-input" rows="1" class="w-full bg-transparent text-slate-200 placeholder-slate-500 p-4 focus:outline-none resize-none" placeholder="Ask a financial question..."></textarea>
         
         <div class="flex justify-between items-center px-4 pb-2">
@@ -81,24 +82,44 @@
         </div>
       </div>
 
-      <div id="suggestions" class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
-        <div onclick="runDemo('Show variance analysis')" class="suggestion-chip p-4 rounded-xl text-left">
+      <div id="suggestions" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        
+        <div onclick="runDemo('Show Q4 Variance')" class="suggestion-chip p-4 rounded-xl text-left">
           <div class="text-blue-400 mb-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
           <div class="text-slate-200 font-medium text-sm">"Show Q4 Variance"</div>
-          <div class="text-slate-500 text-xs mt-1">Ambiguous: $ or %?</div>
+          <div class="text-slate-500 text-xs mt-1">Ambiguity: $ vs %?</div>
         </div>
 
-        <div onclick="runDemo('Analyze profitability')" class="suggestion-chip p-4 rounded-xl text-left">
+        <div onclick="runDemo('Analyze Profitability')" class="suggestion-chip p-4 rounded-xl text-left">
           <div class="text-purple-400 mb-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
-          <div class="text-slate-200 font-medium text-sm">"Analyze Profitability"</div>
-          <div class="text-slate-500 text-xs mt-1">Ambiguous: Gross/Net?</div>
+          <div class="text-slate-200 font-medium text-sm">"Analyze Profit"</div>
+          <div class="text-slate-500 text-xs mt-1">Ambiguity: Gross/Net/EBITDA?</div>
         </div>
 
-        <div onclick="runDemo('Compare budget vs actual')" class="suggestion-chip p-4 rounded-xl text-left">
-          <div class="text-emerald-400 mb-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg></div>
+        <div onclick="runDemo('Check Budget Burn')" class="suggestion-chip p-4 rounded-xl text-left">
+          <div class="text-emerald-400 mb-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" /></svg></div>
           <div class="text-slate-200 font-medium text-sm">"Check Budget Burn"</div>
-          <div class="text-slate-500 text-xs mt-1">Ambiguous: Cash/Accrual?</div>
+          <div class="text-slate-500 text-xs mt-1">Ambiguity: Cash vs Accrual?</div>
         </div>
+
+        <div onclick="runDemo('Review Headcount Costs')" class="suggestion-chip p-4 rounded-xl text-left">
+          <div class="text-orange-400 mb-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0z" /></svg></div>
+          <div class="text-slate-200 font-medium text-sm">"Headcount Spend"</div>
+          <div class="text-slate-500 text-xs mt-1">Ambiguity: Salary vs Fully Loaded?</div>
+        </div>
+
+        <div onclick="runDemo('Forecast Revenue')" class="suggestion-chip p-4 rounded-xl text-left">
+          <div class="text-cyan-400 mb-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg></div>
+          <div class="text-slate-200 font-medium text-sm">"Forecast Revenue"</div>
+          <div class="text-slate-500 text-xs mt-1">Ambiguity: Weighted vs Committed?</div>
+        </div>
+
+        <div onclick="runDemo('Calculate CAC Payback')" class="suggestion-chip p-4 rounded-xl text-left">
+          <div class="text-pink-400 mb-2"><svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg></div>
+          <div class="text-slate-200 font-medium text-sm">"CAC Payback"</div>
+          <div class="text-slate-500 text-xs mt-1">Ambiguity: Gross vs Contribution?</div>
+        </div>
+
       </div>
 
       <div id="step-resolver" class="hidden mt-6">
@@ -109,21 +130,21 @@
             </div>
             <div class="flex-1">
               <h3 class="text-white font-medium text-lg">Ambiguity Detected</h3>
-              <p class="text-slate-400 text-sm mt-1">I found multiple ways to interpret this request. Which metric aligns with your goal?</p>
+              <p class="text-slate-400 text-sm mt-1">"Variance" is a broad term. To provide the correct analysis, I need to know which metric aligns with your goal:</p>
               
               <div class="mt-4 grid grid-cols-1 gap-3">
                 <button onclick="launchDashboard()" class="text-left group flex items-center justify-between p-3 rounded-lg border border-slate-700 hover:border-blue-500 hover:bg-blue-500/10 transition">
                   <div>
-                    <div class="text-blue-400 font-medium group-hover:text-blue-300">Metric A: Operational View</div>
-                    <div class="text-slate-500 text-xs mt-0.5">Excludes one-time expenses & capital costs.</div>
+                    <div class="text-blue-400 font-medium group-hover:text-blue-300">Dollar Variance ($)</div>
+                    <div class="text-slate-500 text-xs mt-0.5">Absolute difference (Budget - Actual). Best for cash impact.</div>
                   </div>
                   <span class="text-slate-500 group-hover:text-blue-400">Select &rarr;</span>
                 </button>
                 
                 <button onclick="launchDashboard()" class="text-left group flex items-center justify-between p-3 rounded-lg border border-slate-700 hover:border-blue-500 hover:bg-blue-500/10 transition">
                   <div>
-                    <div class="text-blue-400 font-medium group-hover:text-blue-300">Metric B: GAAP View</div>
-                    <div class="text-slate-500 text-xs mt-0.5">Fully loaded standard accounting view.</div>
+                    <div class="text-blue-400 font-medium group-hover:text-blue-300">Percentage Variance (%)</div>
+                    <div class="text-slate-500 text-xs mt-0.5">Relative difference (Var / Budget). Best for efficiency.</div>
                   </div>
                   <span class="text-slate-500 group-hover:text-blue-400">Select &rarr;</span>
                 </button>
