@@ -5,7 +5,6 @@
   <title>COREWORKS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
@@ -115,10 +114,7 @@
 <!-- HEADER -->
 <header class="sticky top-0 z-50">
   <div class="flex items-center h-14 px-4 gap-6">
-
-    <div class="text-xl font-semibold tracking-tight">
-      COREWORKS
-    </div>
+    <div class="text-xl font-semibold tracking-tight">COREWORKS</div>
 
     <div class="flex items-center gap-2">
       <div class="px-3 py-1.5 rounded-md bg-blue-50 text-blue-600 text-sm font-medium">
@@ -140,56 +136,93 @@
   </div>
 </header>
 
-<!-- CHAT -->
-<main class="min-h-[calc(100vh-56px)] flex items-center justify-center px-4">
-  <div class="w-full max-w-3xl">
+<!-- MAIN -->
+<main id="main" class="min-h-[calc(100vh-56px)] flex flex-col">
 
-    <!-- Chat history -->
-    <div id="chat-history" class="space-y-4 mb-6"></div>
-
-    <!-- Input -->
-    <div class="card rounded-xl shadow-sm">
-      <textarea
-        id="chat-input"
-        rows="1"
-        placeholder="Ask a financial question…"
-        class="w-full resize-none bg-transparent px-5 py-4 text-lg focus:outline-none"
-      ></textarea>
-
-      <div class="flex items-center justify-between px-5 pb-4">
-        <div class="text-sm text-gray-500">
-          📎 financials_q4.xlsx attached
-        </div>
-
-        <button
-          onclick="sendMessage()"
-          class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white">
-          →
-        </button>
-      </div>
-    </div>
-
-    <p class="mt-4 text-sm text-gray-400 text-center">
-      The system will clarify assumptions before execution.
-    </p>
-
-    <!-- Prompt bubbles -->
-    <div class="mt-6 flex flex-wrap justify-center gap-3">
-      <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Compare burn vs forecast')">
-        Compare burn vs forecast
-      </button>
-      <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Analyze profitability')">
-        Analyze profitability
-      </button>
-      <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Check budget burn')">
-        Check budget burn
-      </button>
-      <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Review headcount costs')">
-        Review headcount costs
-      </button>
-    </div>
+  <!-- CHAT HISTORY -->
+  <div id="chat-history"
+       class="flex-1 overflow-y-auto px-4 pt-12 pb-32 space-y-8 hidden">
 
   </div>
+
+  <!-- LANDING INPUT -->
+  <div id="landing-input"
+       class="flex-1 flex flex-col items-center justify-center px-4">
+
+    <div class="w-full max-w-3xl">
+
+      <div class="card rounded-xl shadow-sm">
+        <textarea
+          id="chat-input"
+          rows="1"
+          placeholder="Ask a financial question…"
+          class="w-full resize-none bg-transparent px-5 py-4 text-lg focus:outline-none"
+        ></textarea>
+
+        <div class="flex items-center justify-between px-5 pb-4">
+          <div class="text-sm text-gray-500">
+            📎 financials_q4.xlsx attached
+          </div>
+
+          <button
+            onclick="sendMessage()"
+            class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white">
+            →
+          </button>
+        </div>
+      </div>
+
+      <p class="mt-4 text-sm text-gray-400 text-center">
+        The system will clarify assumptions before execution.
+      </p>
+
+      <!-- Prompt pills -->
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Compare burn vs forecast')">
+          Compare burn vs forecast
+        </button>
+        <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Analyze profitability')">
+          Analyze profitability
+        </button>
+        <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Check budget burn')">
+          Check budget burn
+        </button>
+        <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Review headcount costs')">
+          Review headcount costs
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DOCKED INPUT -->
+  <div id="docked-input"
+       class="hidden border-t border-gray-200 bg-white px-4 py-4">
+
+    <div class="w-full max-w-3xl mx-auto">
+      <div class="card rounded-xl shadow-sm">
+        <textarea
+          id="chat-input-bottom"
+          rows="1"
+          placeholder="Ask a follow-up…"
+          class="w-full resize-none bg-transparent px-5 py-4 text-lg focus:outline-none"
+        ></textarea>
+
+        <div class="flex items-center justify-between px-5 pb-4">
+          <div class="text-sm text-gray-500">
+            📎 financials_q4.xlsx attached
+          </div>
+
+          <button
+            onclick="sendFollowUp()"
+            class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 flex items-center justify-center text-white">
+            →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <!-- SCRIPT -->
@@ -200,7 +233,6 @@
 
   function usePrompt(text) {
     document.getElementById('chat-input').value = text;
-    document.getElementById('chat-input').focus();
   }
 
   function sendMessage() {
@@ -208,29 +240,45 @@
     const text = input.value.trim();
     if (!text) return;
 
+    // Switch layout
+    document.getElementById('landing-input').classList.add('hidden');
+    document.getElementById('chat-history').classList.remove('hidden');
+    document.getElementById('docked-input').classList.remove('hidden');
+
+    appendMessage(text);
+    input.value = "";
+  }
+
+  function sendFollowUp() {
+    const input = document.getElementById('chat-input-bottom');
+    const text = input.value.trim();
+    if (!text) return;
+
+    appendMessage(text);
+    input.value = "";
+  }
+
+  function appendMessage(text) {
     const history = document.getElementById('chat-history');
 
-    // User message
     history.innerHTML += `
-      <div class="text-right">
-        <div class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-          ${text}
+      <div class="max-w-3xl mx-auto space-y-4">
+        <div class="text-right">
+          <div class="inline-block bg-blue-600 text-white px-6 py-4 rounded-xl text-base">
+            ${text}
+          </div>
+        </div>
+
+        <div class="text-left">
+          <div class="inline-block bg-gray-100 text-gray-800 px-6 py-4 rounded-xl text-base">
+            🔍 Analyzing your request…<br/>
+            <span class="text-sm text-gray-500">(placeholder response)</span>
+          </div>
         </div>
       </div>
     `;
 
-    input.value = "";
-
-    // Assistant placeholder
-    setTimeout(() => {
-      history.innerHTML += `
-        <div class="text-left">
-          <div class="inline-block bg-gray-100 text-gray-700 px-4 py-2 rounded-lg text-sm">
-            🔍 Analyzing your request… (placeholder response)
-          </div>
-        </div>
-      `;
-    }, 600);
+    history.scrollTop = history.scrollHeight;
   }
 </script>
 
