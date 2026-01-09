@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Finance Ambiguity Resolver</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      background: radial-gradient(
+          1200px 400px at 50% 0%,
+          rgba(59, 130, 246, 0.25),
+          transparent 60%
+        ),
+        linear-gradient(
+          to bottom,
+          #020617 0%,
+          #020617 40%,
+          #020617 100%
+        );
+    }
+
+    .glass {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+    }
+
+    .chat-shadow {
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.08),
+                  0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen text-slate-100">
+
+  <!-- Header -->
+  <header class="flex items-center px-8 py-6">
+    <div class="flex items-center gap-3">
+      <!-- Replace src with actual Coreworks logo if you have it -->
+      <img
+        src="coreworks-logo.svg"
+        alt="Coreworks"
+        class="h-6 w-auto"
+        onerror="this.style.display='none'"
+      />
+
+      <!-- Fallback text logo -->
+      <span class="text-lg font-semibold tracking-wide">
+        COREWORKS
+      </span>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="flex items-center justify-center px-4">
+    <div class="w-full max-w-3xl">
+
+      <!-- Chat container -->
+      <div class="glass chat-shadow rounded-2xl p-6">
+
+        <!-- Prompt -->
+        <div class="text-slate-200 text-lg leading-relaxed">
+          “Compare burn vs forecast”
+        </div>
+
+        <!-- Attachment row -->
+        <div class="mt-4 flex items-center justify-between text-sm text-slate-400">
+          <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828L18 9.828a4 4 0 00-5.656-5.656L6.343 10.172a6 6 0 108.485 8.485L20 13" />
+            </svg>
+            <span>financials_q4.xlsx attached</span>
+          </div>
+
+          <!-- Action button -->
+          <button
+            class="h-9 w-9 rounded-full bg-blue-600 hover:bg-blue-500
+                   flex items-center justify-center transition"
+            title="Run"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white"
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- Helper text -->
+      <p class="mt-6 text-center text-sm text-slate-500">
+        Ask a finance question. The system will clarify before running.
+      </p>
+
+    </div>
+  </main>
+
+</body>
+</html>
