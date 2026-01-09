@@ -2,287 +2,339 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Coreworks</title>
+  <title>Coreworks AI Prototype</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="coreworks-icon.svg" />
-
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
   <style>
     /* ======================
        THEME TOKENS
     ====================== */
-    body {
-      --bg: #f9fafb;
+    :root {
+      --bg: #ffffff;
       --surface: #ffffff;
-      --border: #e5e7eb;
+      --surface-hover: #f3f4f6;
+      --border: #e2e8f0;
       --text: #0f172a;
-      --muted: #6b7280;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --spreadsheet-green: #16a34a;
+    }
 
-      background: var(--bg);
+    /* MATTE BLACK THEME */
+    .dark {
+      --bg: #09090b;        /* True Matte Black */
+      --surface: #09090b;   
+      --surface-hover: #18181b;
+      --border: #27272a;    /* Zinc 800 */
+      --text: #e4e4e7;      /* Zinc 200 */
+      --text-muted: #a1a1aa;
+      --primary: #3b82f6;
+    }
+
+    body {
+      background-color: var(--bg);
       color: var(--text);
-      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-      transition: background-color 0.2s ease, color 0.2s ease;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     }
 
-    body.dark {
-      --bg: #0a0a0a;        /* TRUE matte black */
-      --surface: #121212;   /* neutral dark surface */
-      --border: #1e1e1e;
-      --text: #e5e5e5;
-      --muted: #a3a3a3;
+    /* Utility to hide scrollbar but keep functionality */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
 
+    /* Custom Borders & Cards */
+    .border-theme { border-color: var(--border); }
+    .bg-surface { background-color: var(--surface); }
+    
+    .hover-surface:hover { background-color: var(--surface-hover); }
+
+    /* Sticky Header Blur */
     header {
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+    }
+    .dark header {
+      background: rgba(9, 9, 11, 0.85); /* Matches matte black with transparency */
     }
 
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-    }
-
-    .pill {
-      background: var(--surface);
-      border: 1px solid var(--border);
+    /* Inputs */
+    textarea {
+      background: transparent;
       color: var(--text);
     }
-
-    .pill:hover {
-      background: rgba(0,0,0,0.04);
+    textarea::placeholder {
+      color: var(--text-muted);
+      opacity: 0.7;
     }
 
-    body.dark .pill:hover {
-      background: #1a1a1a;
+    /* Toggle Switch */
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: var(--primary);
     }
-
-    .file-tab {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 13px;
-      background: var(--surface);
-      color: var(--text);
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: var(--primary);
     }
-
-    .toggle {
-      width: 42px;
-      height: 22px;
-      border-radius: 9999px;
-      background: #d4d4d4;
-      position: relative;
-      cursor: pointer;
+    
+    /* Animation */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-
-    .toggle::after {
-      content: "";
-      width: 18px;
-      height: 18px;
-      background: #ffffff;
-      border-radius: 9999px;
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      transition: transform 0.2s ease;
-    }
-
-    body.dark .toggle {
-      background: #3b82f6; /* blue only for control */
-    }
-
-    body.dark .toggle::after {
-      transform: translateX(20px);
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
     }
   </style>
 </head>
 
-<body class="min-h-screen" id="app">
+<body class="flex flex-col min-h-screen">
 
-<!-- ================= HEADER ================= -->
-<header class="sticky top-0 z-50">
-  <div class="flex items-center h-14 px-4 gap-4">
+  <header class="sticky top-0 z-50 border-b border-theme h-14 flex items-center px-4 justify-between">
+    
+    <div class="flex items-center gap-6">
+      <a href="#" class="flex items-center gap-2 group">
+        <div class="w-6 h-6 bg-black dark:bg-white rounded-md flex items-center justify-center text-white dark:text-black font-bold text-xs">
+          C
+        </div>
+        <span class="font-semibold tracking-tight text-lg group-hover:opacity-80 transition-opacity">
+          COREWORKS
+        </span>
+      </a>
 
-    <!-- Brand (CLICKABLE HOME) -->
-    <a href="/" class="flex items-center gap-2 hover:opacity-80">
-      <img src="coreworks-icon.svg" alt="Coreworks" class="h-5 w-5" />
-      <span class="text-lg font-semibold tracking-tight">COREWORKS</span>
-    </a>
+      <div class="flex items-center h-8 gap-3">
+        <div class="h-full px-3 flex items-center gap-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 text-sm font-medium rounded border border-blue-200 dark:border-blue-800">
+          <i class="ph ph-chat-circle-text text-lg"></i>
+          Chat
+        </div>
 
-    <!-- Tabs -->
-    <div class="flex items-center gap-2 ml-4">
-      <div class="px-3 py-1.5 rounded-md bg-blue-600 text-white text-sm font-medium">
-        Chat
-      </div>
-
-      <div class="file-tab">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#16a34a">
-          <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-        </svg>
-        02_NetSuite_Budget_vs_Actual.csv
-      </div>
-    </div>
-
-    <div class="flex-1"></div>
-
-    <!-- Dark mode toggle -->
-    <div onclick="toggleTheme()" class="toggle" title="Toggle dark mode"></div>
-  </div>
-</header>
-
-<!-- ================= MAIN ================= -->
-<main class="min-h-[calc(100vh-56px)] flex flex-col">
-
-  <!-- Chat history -->
-  <div id="chat-history"
-       class="flex-1 overflow-y-auto px-4 pt-12 pb-36 space-y-10 hidden">
-  </div>
-
-  <!-- Landing -->
-  <div id="landing"
-       class="flex-1 flex items-center justify-center px-4">
-
-    <div class="w-full max-w-3xl">
-
-      <div class="card rounded-xl">
-        <textarea
-          id="chat-input"
-          rows="1"
-          placeholder="Ask a financial question…"
-          class="w-full bg-transparent resize-none px-5 py-4 text-lg focus:outline-none"
-        ></textarea>
-
-        <div class="flex items-center justify-between px-5 pb-4 text-sm text-[color:var(--muted)]">
-          📎 financials_q4.xlsx attached
-          <button onclick="sendMessage()"
-                  class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center">
-            →
-          </button>
+        <div class="h-full px-3 flex items-center gap-2 border border-theme rounded hover-surface cursor-pointer text-sm text-[var(--text-muted)]">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="8" y1="13" x2="16" y2="13"></line>
+            <line x1="8" y1="17" x2="16" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span class="truncate max-w-[200px]">02_NetSuite_Budget_vs_Actual.csv</span>
         </div>
       </div>
-
-      <!-- Prompt pills -->
-      <div class="mt-6 flex flex-wrap justify-center gap-3">
-        <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Compare burn vs forecast')">
-          Compare burn vs forecast
-        </button>
-        <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Analyze profitability')">
-          Analyze profitability
-        </button>
-        <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Check budget burn')">
-          Check budget burn
-        </button>
-        <button class="pill px-4 py-2 rounded-full text-sm" onclick="usePrompt('Review headcount costs')">
-          Review headcount costs
-        </button>
-      </div>
-
     </div>
-  </div>
 
-  <!-- Docked input -->
-  <div id="docked"
-       class="hidden border-t border-[color:var(--border)] bg-[color:var(--bg)] px-4 py-4">
+    <div class="flex items-center gap-4">
+      <button onclick="toggleTheme()" class="w-8 h-8 rounded-full flex items-center justify-center hover-surface text-[var(--text-muted)] transition-colors">
+        <i class="ph ph-moon text-xl dark:hidden"></i>
+        <i class="ph ph-sun text-xl hidden dark:block"></i>
+      </button>
+      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 border border-white dark:border-zinc-700 shadow-sm"></div>
+    </div>
+  </header>
 
-    <div class="w-full max-w-3xl mx-auto">
+  <main class="flex-1 flex flex-col relative overflow-hidden">
 
-      <!-- Prompt pills -->
-      <div class="mb-3 flex flex-wrap gap-2">
-        <button class="pill px-3 py-1.5 rounded-full text-sm" onclick="useBottom('Compare burn vs forecast')">
-          Compare burn vs forecast
-        </button>
-        <button class="pill px-3 py-1.5 rounded-full text-sm" onclick="useBottom('Analyze profitability')">
-          Analyze profitability
-        </button>
+    <div id="chat-history" class="flex-1 overflow-y-auto px-4 py-8 space-y-8 hidden scroll-smooth">
       </div>
 
-      <div class="card rounded-xl">
-        <textarea
-          id="chat-input-bottom"
-          rows="1"
-          placeholder="Ask a follow-up…"
-          class="w-full bg-transparent resize-none px-5 py-4 text-lg focus:outline-none"
-        ></textarea>
+    <div id="landing-container" class="absolute inset-0 flex items-center justify-center p-4 z-10 bg-[var(--bg)] transition-all duration-500">
+      <div class="w-full max-w-2xl flex flex-col items-center">
+        
+        <div class="mb-8 p-4 rounded-2xl bg-blue-50 dark:bg-blue-900/10 text-blue-600 dark:text-blue-400">
+          <i class="ph ph-sparkle text-3xl"></i>
+        </div>
+        
+        <h1 class="text-2xl font-medium mb-8 text-center">How can I help with your Q4 financials?</h1>
 
-        <div class="flex items-center justify-between px-5 pb-4 text-sm text-[color:var(--muted)]">
-          📎 financials_q4.xlsx attached
-          <button onclick="sendFollowUp()"
-                  class="h-8 w-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center">
-            →
+        <div class="w-full relative group">
+          <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl opacity-20 group-hover:opacity-40 transition duration-300 blur"></div>
+          <div class="relative bg-surface border border-theme rounded-xl shadow-sm p-4">
+            <textarea 
+              id="landing-input" 
+              rows="1" 
+              class="w-full text-lg focus:outline-none bg-transparent resize-none max-h-32"
+              placeholder="Ask a financial question..."
+              oninput="autoResize(this)"
+              onkeydown="handleEnter(event, 'landing')"
+            ></textarea>
+            
+            <div class="flex justify-between items-center mt-3 pt-2 border-t border-dashed border-theme">
+              <span class="text-xs text-[var(--text-muted)] flex items-center gap-1">
+                <i class="ph ph-paperclip"></i> Context active: Q4 Budget
+              </span>
+              <button onclick="transitionToChat()" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 transition-colors">
+                <i class="ph ph-arrow-right text-lg"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-wrap justify-center gap-2">
+          <button onclick="fillInput('Compare burn vs forecast')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
+            Compare burn vs forecast
+          </button>
+          <button onclick="fillInput('Analyze profitability by region')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
+            Analyze profitability by region
+          </button>
+          <button onclick="fillInput('Draft executive summary')" class="px-4 py-2 rounded-full border border-theme bg-surface hover-surface text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors">
+            Draft executive summary
           </button>
         </div>
       </div>
     </div>
-  </div>
 
-</main>
-
-<!-- ================= SCRIPT ================= -->
-<script>
-  function toggleTheme() {
-    document.body.classList.toggle('dark');
-  }
-
-  function usePrompt(text) {
-    document.getElementById('chat-input').value = text;
-  }
-
-  function useBottom(text) {
-    document.getElementById('chat-input-bottom').value = text;
-  }
-
-  function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const text = input.value.trim();
-    if (!text) return;
-
-    document.getElementById('landing').classList.add('hidden');
-    document.getElementById('chat-history').classList.remove('hidden');
-    document.getElementById('docked').classList.remove('hidden');
-
-    appendMessage(text);
-    input.value = "";
-  }
-
-  function sendFollowUp() {
-    const input = document.getElementById('chat-input-bottom');
-    const text = input.value.trim();
-    if (!text) return;
-
-    appendMessage(text);
-    input.value = "";
-  }
-
-  function appendMessage(text) {
-    const history = document.getElementById('chat-history');
-
-    history.innerHTML += `
-      <div class="max-w-3xl mx-auto space-y-4">
-        <div class="text-right">
-          <div class="inline-block bg-blue-600 text-white px-6 py-4 rounded-xl text-base">
-            ${text}
-          </div>
+    <div id="docked-input-container" class="hidden border-t border-theme bg-[var(--bg)] p-4">
+      <div class="max-w-3xl mx-auto">
+        <div class="flex gap-2 mb-3 overflow-x-auto no-scrollbar">
+           <button onclick="fillDocked('Visualize this')" class="whitespace-nowrap px-3 py-1 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
+            Visualize this
+          </button>
+          <button onclick="fillDocked('Export to PDF')" class="whitespace-nowrap px-3 py-1 rounded-full border border-theme bg-surface hover-surface text-xs text-[var(--text-muted)] transition-colors">
+            Export to PDF
+          </button>
         </div>
 
-        <div class="text-left">
-          <div class="inline-block bg-[color:var(--surface)] border border-[color:var(--border)]
-                      px-6 py-4 rounded-xl text-base">
-            🔍 Analyzing your request…<br/>
-            <span class="text-sm text-[color:var(--muted)]">(placeholder response)</span>
-          </div>
+        <div class="relative bg-surface border border-theme rounded-xl shadow-sm p-3 flex items-end gap-2">
+          <button class="text-[var(--text-muted)] hover:text-[var(--text)] p-2">
+            <i class="ph ph-plus-circle text-xl"></i>
+          </button>
+          <textarea 
+            id="docked-input" 
+            rows="1" 
+            class="w-full py-2 text-base focus:outline-none bg-transparent resize-none max-h-32"
+            placeholder="Ask a follow-up..."
+            oninput="autoResize(this)"
+            onkeydown="handleEnter(event, 'docked')"
+          ></textarea>
+          <button onclick="sendDockedMessage()" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg p-2 mb-0.5 transition-colors shadow-sm">
+            <i class="ph ph-arrow-up text-lg"></i>
+          </button>
+        </div>
+        <div class="text-center mt-2">
+           <span class="text-[10px] text-[var(--text-muted)]">Coreworks AI can make mistakes. Verify financial data.</span>
         </div>
       </div>
-    `;
+    </div>
 
-    history.scrollTop = history.scrollHeight;
-  }
-</script>
+  </main>
 
+  <script>
+    // --- Theme Toggle ---
+    function toggleTheme() {
+      document.body.classList.toggle('dark');
+    }
+
+    // --- Interaction Logic ---
+    function autoResize(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    function fillInput(text) {
+      const input = document.getElementById('landing-input');
+      input.value = text;
+      input.focus();
+    }
+
+    function fillDocked(text) {
+      const input = document.getElementById('docked-input');
+      input.value = text;
+      input.focus();
+    }
+
+    function handleEnter(e, source) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (source === 'landing') transitionToChat();
+        else sendDockedMessage();
+      }
+    }
+
+    // --- State Management ---
+    function transitionToChat() {
+      const landingInput = document.getElementById('landing-input');
+      const msg = landingInput.value.trim();
+      
+      if (!msg) return;
+
+      // 1. Hide Landing
+      const landing = document.getElementById('landing-container');
+      landing.style.opacity = '0';
+      setTimeout(() => {
+        landing.classList.add('hidden');
+        
+        // 2. Show Chat Interface
+        document.getElementById('chat-history').classList.remove('hidden');
+        document.getElementById('docked-input-container').classList.remove('hidden');
+        
+        // 3. Add Message
+        addMessage(msg, 'user');
+        
+        // 4. Simulate AI Response
+        setTimeout(() => showTypingIndicator(), 600);
+      }, 300);
+    }
+
+    function sendDockedMessage() {
+      const input = document.getElementById('docked-input');
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      addMessage(msg, 'user');
+      input.value = '';
+      input.style.height = 'auto'; // Reset height
+
+      setTimeout(() => showTypingIndicator(), 600);
+    }
+
+    function addMessage(text, sender) {
+      const history = document.getElementById('chat-history');
+      const isUser = sender === 'user';
+      
+      const div = document.createElement('div');
+      div.className = `w-full max-w-3xl mx-auto flex ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`;
+      
+      div.innerHTML = `
+        <div class="${isUser 
+          ? 'bg-blue-600 text-white rounded-2xl rounded-tr-sm' 
+          : 'bg-surface border border-theme text-[var(--text)] rounded-2xl rounded-tl-sm shadow-sm'} 
+          px-5 py-3 text-base max-w-[80%] leading-relaxed">
+          ${text}
+        </div>
+      `;
+      
+      history.appendChild(div);
+      history.scrollTo(0, history.scrollHeight);
+    }
+
+    function showTypingIndicator() {
+      const history = document.getElementById('chat-history');
+      const div = document.createElement('div');
+      div.id = 'typing-indicator';
+      div.className = `w-full max-w-3xl mx-auto flex justify-start animate-fade-in`;
+      
+      div.innerHTML = `
+        <div class="bg-surface border border-theme px-4 py-3 rounded-2xl rounded-tl-sm shadow-sm flex items-center gap-2">
+          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+          <div class="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style="animation-delay: 0.4s"></div>
+        </div>
+      `;
+      history.appendChild(div);
+      history.scrollTo(0, history.scrollHeight);
+
+      // Remove typing and add real text after delay
+      setTimeout(() => {
+        div.remove();
+        addMessage("I've analyzed the Q4 budget data. The burn rate is 12% higher than forecast due to unexpected marketing spend in October.", 'ai');
+      }, 1500);
+    }
+  </script>
 </body>
 </html>
