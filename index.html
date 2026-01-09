@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Coreworks</title>
+  <title>Coreworks AI Prototype</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <link rel="icon" type="image/svg+xml" href="coreworks-icon.svg" />
 
   <script src="https://cdn.tailwindcss.com"></script>
 
@@ -21,7 +23,6 @@
       --text: #0f172a;
       --text-muted: #64748b;
       --primary: #2563eb;
-      --spreadsheet-green: #16a34a;
     }
 
     /* MATTE BLACK THEME */
@@ -54,7 +55,6 @@
     /* Custom Borders & Cards */
     .border-theme { border-color: var(--border); }
     .bg-surface { background-color: var(--surface); }
-    
     .hover-surface:hover { background-color: var(--surface-hover); }
 
     /* Sticky Header Blur */
@@ -63,7 +63,7 @@
       backdrop-filter: blur(8px);
     }
     .dark header {
-      background: rgba(9, 9, 11, 0.85); /* Matches matte black with transparency */
+      background: rgba(9, 9, 11, 0.85);
     }
 
     /* Inputs */
@@ -74,15 +74,6 @@
     textarea::placeholder {
       color: var(--text-muted);
       opacity: 0.7;
-    }
-
-    /* Toggle Switch */
-    .toggle-checkbox:checked {
-      right: 0;
-      border-color: var(--primary);
-    }
-    .toggle-checkbox:checked + .toggle-label {
-      background-color: var(--primary);
     }
     
     /* Animation */
@@ -101,10 +92,9 @@
   <header class="sticky top-0 z-50 border-b border-theme h-14 flex items-center px-4 justify-between">
     
     <div class="flex items-center gap-6">
-      <a href="#" class="flex items-center gap-2 group">
-        <div class="w-6 h-6 bg-black dark:bg-white rounded-md flex items-center justify-center text-white dark:text-black font-bold text-xs">
-          C
-        </div>
+      <a href="/" class="flex items-center gap-2 group cursor-pointer">
+        <img src="coreworks-icon.svg" alt="Coreworks" class="h-6 w-6" />
+        
         <span class="font-semibold tracking-tight text-lg group-hover:opacity-80 transition-opacity">
           COREWORKS
         </span>
@@ -130,11 +120,14 @@
     </div>
 
     <div class="flex items-center gap-4">
-      <button onclick="toggleTheme()" class="w-8 h-8 rounded-full flex items-center justify-center hover-surface text-[var(--text-muted)] transition-colors">
+      <button onclick="toggleTheme()" class="w-8 h-8 rounded-full flex items-center justify-center hover-surface text-[var(--text-muted)] transition-colors" title="Toggle Dark Mode">
         <i class="ph ph-moon text-xl dark:hidden"></i>
         <i class="ph ph-sun text-xl hidden dark:block"></i>
       </button>
-      <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 border border-white dark:border-zinc-700 shadow-sm"></div>
+
+      <div class="w-8 h-8 rounded-full bg-slate-200 dark:bg-zinc-800 border border-theme flex items-center justify-center text-xs font-medium text-[var(--text-muted)] cursor-pointer" title="User Profile">
+        CW
+      </div>
     </div>
   </header>
 
